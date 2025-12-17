@@ -6,8 +6,6 @@ pub mod config;
 use diesel::prelude::*;
 use dotenvy::dotenv;
 use std::env;
-
-
 use models::Urls;
 
 

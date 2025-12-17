@@ -4,7 +4,10 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-yaml-rust = "0.4.5"
 anyhow = "1.0.100"
-diesel = {version = "2.3.4", features = ["postgres", "chrono"]}
+diesel = {version = "2.3.4", features = ["postgres"]}
 dotenvy = "0.15"
+mongodb = {version = "3.4.1", features = ["sync"]}
+serde = "1.0.188"
+yaml-rust = "0.4.5"
+
