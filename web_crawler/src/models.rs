@@ -1,6 +1,6 @@
 use diesel::prelude::*;
 
-#[derive(Queryable, Selectable)]
+#[derive(Queryable, Selectable, Clone)]
 #[diesel(table_name = crate::schema::urls)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct Urls {

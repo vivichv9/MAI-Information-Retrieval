@@ -5,11 +5,11 @@ use mongodb::{
 };
 
 pub struct Config {
-    delay: u32,
-    domain: String,
-    initial_path: String,
-    collection: Collection<Document>,
-    metadata_db: PgConnection,
+    pub delay: u32,
+    pub domain: String,
+    pub initial_path: String,
+    pub collection: Collection<Document>,
+    pub metadata_db: PgConnection,
 }
 
 impl Config {
@@ -23,7 +23,7 @@ impl Config {
 
         let pg_conn = PgConnection::establish(&pg_uri)
             .unwrap_or_else(|_| panic!("Error connecting to {}", pg_uri));
-
+        
         Self {
             delay,
             domain,

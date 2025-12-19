@@ -1,37 +1,48 @@
+pub mod config;
+pub mod crawler;
 pub mod models;
 pub mod schema;
-pub mod crawler;
-pub mod config;
 
-use diesel::prelude::*;
+use anyhow::Result;
 use dotenvy::dotenv;
-use std::env;
-use models::Urls;
+use std::fs;
+use yaml_rust::YamlLoader;
 
+use crate::config::Config;
+use crate::crawler::Crawler;
 
-pub fn establish_connection() -> PgConnection {
+fn main() -> Result<()> {
     dotenv().ok();
 
-    let database_url = env::var("PG_URL").expect("PG_URL must be set");
-    PgConnection::establish(&database_url)
-        .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
-}
+    let config_path: String = std::env::args().nth(1).expect("no config file given");
+    let yaml_config: String = fs::read_to_string(config_path)?;
+    let crawler_cfg = YamlLoader::load_from_str(&yaml_config)?;
 
-fn main() -> Result<(), ()> {
-    use self::schema::urls::dsl::*;
+    let delay = crawler_cfg[0]["crawler"]["delay"]
+        .as_i64()
+        .expect("Delay is not configured");
+    let domain = crawler_cfg[0]["crawler"]["domain"]
+        .as_str()
+        .expect("Domain is not configured");
+    let initial_path = crawler_cfg[0]["crawler"]["initial_path"]
+        .as_str()
+        .expect("Initial path is not configured");
+    let mongo_uri = crawler_cfg[0]["crawler"]["mongo"]
+        .as_str()
+        .expect("Mongo URI is not configured");
+    let pg_uri = crawler_cfg[0]["crawler"]["postgres"]
+        .as_str()
+        .expect("Postrges URI is not configured");
 
-    let connection = &mut establish_connection();
-    let results = urls
-        .filter(is_parsed.eq(true))
-        .limit(5)
-        .select(Urls::as_select())
-        .load(connection)
-        .expect("Error loading urls");
+    let crawler_cfg = Config::new(
+        delay as u32,
+        String::from(domain),
+        String::from(initial_path),
+        mongo_uri,
+        pg_uri,
+    );
 
-    println!("Displaying {} posts", results.len());
-    for url in results {
-        println!("{}", url.path);
-        println!("{}", url.is_parsed);
-    }
+    let crawler = Crawler::new(crawler_cfg);
+
     Ok(())
 }
