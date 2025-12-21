@@ -18,8 +18,8 @@ impl Config {
             panic!("Failed to initialize mongo client with uri: {}", mongo_uri)
         });
 
-        let mongo_db = mongo_client.database("documents");
-        let documents_collection: Collection<Document> = mongo_db.collection("movies");
+        let mongo_db = mongo_client.database("crawler");
+        let documents_collection: Collection<Document> = mongo_db.collection("raw_documents");
 
         let pg_conn = PgConnection::establish(&pg_uri)
             .unwrap_or_else(|_| panic!("Error connecting to {}", pg_uri));

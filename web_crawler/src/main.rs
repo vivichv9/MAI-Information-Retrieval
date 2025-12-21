@@ -11,6 +11,7 @@ use yaml_rust::YamlLoader;
 use crate::config::Config;
 use crate::crawler::Crawler;
 
+
 fn main() -> Result<()> {
     dotenv().ok();
 
@@ -42,7 +43,10 @@ fn main() -> Result<()> {
         pg_uri,
     );
 
-    let crawler = Crawler::new(crawler_cfg);
+
+    let mut crawler = Crawler::new(crawler_cfg);
+
+    crawler.start();
 
     Ok(())
 }
