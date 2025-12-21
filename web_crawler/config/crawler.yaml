@@ -1,5 +1,5 @@
 crawler:
-  delay: 100
+  delay: 50
   domain: https://www.geeksforgeeks.org/
   initial_path: dsa/dsa-tutorial-learn-data-structures-and-algorithms/
   mongo: mongodb://root:password@localhost:27017/

@@ -28,11 +28,11 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=password
-    deploy:
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 512M
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.50'
+    #       memory: 512M
     volumes:
       - ./.data/mongo/data:/data/db
       - ./.data/mongo/config:/data/configdb

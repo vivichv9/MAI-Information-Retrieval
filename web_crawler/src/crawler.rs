@@ -154,9 +154,21 @@ impl Crawler {
             println!("{}", url);
             let delay = time::Duration::from_millis(self.config.delay as u64);
             thread::sleep(delay);
-            let doc = self.get_document(&url).expect("Failde to get doc");
-            self.update_metadata(&doc).unwrap();
-            self.update_document(&doc, &url).unwrap();
+
+            let doc = match self.get_document(&url) {
+                Ok(doc) => doc,
+                Err(_) => String::from("Error in requests")
+            };
+
+            let _ = match self.update_metadata(&doc) {
+                Ok(_) => (),
+                Err(_) => continue
+            };
+
+            let _ = match self.update_document(&doc, &url) {
+                Ok(_) => (),
+                Err(_) => continue
+            };
         }
     }
 }
